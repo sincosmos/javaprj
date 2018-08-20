@@ -91,7 +91,7 @@ public class ArraySort {
         }
     }
 
-    public static void bubblingSort(int[] arr){
+    public static void selectionSort(int[] arr){
         for(int i=0; i<arr.length; ++i){
             int min = arr[i];
             int idx = i;
@@ -106,6 +106,18 @@ public class ArraySort {
         }
     }
 
+    public static void bubblingSort(int[] arr){
+        for(int i=0; i<arr.length; ++i){
+            for(int j=0; j<arr.length-i-1; ++j){
+                if(arr[j] > arr[j+1]){
+                    int tmp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = tmp;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args){
         int[] arr = new int[21];
         Random rand = new Random(43);
@@ -117,8 +129,8 @@ public class ArraySort {
         Arrays.stream(arr).forEach(x -> System.out.print(x + "\t"));
         System.out.println();
 
-        /*bubblingSort(arr);
-        System.out.println("array after bublling sort");
+        /*selectionSort(arr);
+        System.out.println("array after selection sort");
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
         System.out.println();*/
 
@@ -133,9 +145,16 @@ public class ArraySort {
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
         System.out.println();*/
 
-        System.out.println("array after quick sort");
+        /*System.out.println("array after quick sort");
         quickSort(arr,0, arr.length - 1);
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
+        System.out.println();*/
+
+        System.out.println("array after bubbling sort");
+        bubblingSort(arr);
+        Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
         System.out.println();
+
+
     }
 }
