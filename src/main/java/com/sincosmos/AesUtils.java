@@ -27,8 +27,12 @@ public class AesUtils {
   
   public static void main(String[] args) throws Exception {
 	  AesUtils aes = new AesUtils("0b79937a9608e64c","0b79937a9608e64c");
-	  System.out.println(aes.decrypt("af943cb1ebca718774f6443fecbe6786"));
-	  System.out.println(aes.decrypt("e88ab45548dc17f9b2d04ea57fa5a6d1"));
+	  System.out.println(aes.decrypt("596d0754c0d37e16feb2a84d593961205fa17cbd727b6f2da3a3d8cea0af1da1") + "==");
+	  System.out.println(aes.decrypt("ba98f34c80d0d18393426f6f3e5b6023") + "==");
+
+    System.out.println(aes.decrypt("f57ef34626d384b4dcaf8d2bf3f5c9f5b96d63feb33c4f7fac809af4e5633268") + "==");
+
+      System.out.println("==      " + "==");
   }
   
   /**
