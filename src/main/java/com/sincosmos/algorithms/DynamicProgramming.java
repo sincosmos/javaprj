@@ -20,16 +20,16 @@ public class DynamicProgramming {
     public int cutRod(int[] price, int n){
         if(n==0)
             return 0;
-        int[] rprice = new int[n+1];
+        int[] maxPrice = new int[n+1];
         for(int j=1; j<=n; ++j){
             int np = -1;
             for(int i=1; i<=j; ++i){
-                int cp = price[i] + rprice[j-i];
+                int cp = price[i] + maxPrice[j-i];
                 np = np>cp? np:cp;
             }
-            rprice[j] = np;
+            maxPrice[j] = np;
         }
-        return rprice[n];
+        return maxPrice[n];
     }
 
     public static void main(String[] args){
