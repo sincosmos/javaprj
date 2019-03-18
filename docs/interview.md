@@ -42,6 +42,13 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 ### 9. switch(String) 的原理
 switch 只支持整型，类如 int, short, byte, char 将被转化为相应的 ascii 码，而 String 则用的是 hashCode() 方法返回 int 型的 hash 值，然后再使用 equals 方法进行进一步判断。
 
+### 10. private 修饰的方法可以通过反射访问，那么 private 的意义是什么？
+private 关键字并非是为了保证变量或方法的安全性，更多是为了实现面向对象编程中的 封装 特性，使得与对外功能无关的细节隐藏起来，让使用者只关注对外公布的接口，从而降低使用成本。
+
+### 11. Java 类初始化的顺序
+基类静态代码块 -> 基类静态成员变量 -> 派生类静态代码块 -> 派生类静态成员变量，基类的构造代码块 -> 基类普通成员变量 -> 基类构造函数 -> 派生类构造代码块 -> 派生类普通成员变量 -> 派生类构造函数
+静态代码块和静态变量只在类第一次加载时执行或初始化，多个静态代码块按照代码出现的顺序
+
 ## 常见框架
 
 ### 1. Java 常用的数据结构

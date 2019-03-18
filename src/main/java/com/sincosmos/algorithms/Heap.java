@@ -276,7 +276,7 @@ public class Heap {
      */
     public static void heapAscSort(int[] arr){
         for(int i=arr.length; i>0; --i){
-            //将无序去转化为最大堆，则无序区的最大元素必在堆顶
+            //将无序区转化为最大堆，则无序区的最大元素必在堆顶
             Heap.arrayToMaxHeap(arr, i);
             //将无序区最大元素放在堆后一个位置，则无序区减小 1
             Heap.swap(arr, 0, i-1);

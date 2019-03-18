@@ -48,9 +48,9 @@ public class Counter {
     public void service(){
         //do something
         try {
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         cnt1++;
         increaseCnt2();
