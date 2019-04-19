@@ -15,9 +15,11 @@ public class DpTests {
     }
 
     public static void main(String[] args){
-        IntStream.range(0,10).forEach(DpTests::testFibonacci);
+        //IntStream.range(0,10).forEach(DpTests::testFibonacci);
         //cut rod
         int[] price = {1,5,8,9,10,17,17,20,24,30};
         //DpTests.testCutRod(price, 5);
+
+        System.out.println(3|9);
     }
 }

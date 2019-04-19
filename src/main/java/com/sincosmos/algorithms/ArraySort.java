@@ -1,7 +1,6 @@
 package com.sincosmos.algorithms;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class ArraySort {
     public static void quickSort(int[] arr, int st, int ed){
@@ -41,6 +40,43 @@ public class ArraySort {
         if(st>=ed)
             return;
         int md = st + (ed-st)/2;
+        mergeSort(arr, st, md, sorted);
+        mergeSort(arr, md+1, ed, sorted);
+
+        //merge two parts
+        int k=st, i=st, j=md+1;
+        while(i<=md && j<=ed){
+            if(arr[i] > arr[j]){
+                sorted[k++] = arr[j++];
+            }else{
+                sorted[k++] = arr[i++];
+            }
+        }
+        while(i<=md){
+            sorted[k++] = arr[i++];
+        }
+        while(j<=ed){
+            sorted[k++] = arr[j++];
+        }
+
+        //copy sorted array
+        for(k=st; k<=ed; ++k){
+            arr[k] = sorted[k];
+        }
+    }
+
+    public static void mergeSort(int[] arr, int[] sorted){
+        //只有一个数，是有序的
+        int st = 0, ed = arr.length - 1;
+        int md = st + (ed-st)/2;
+
+        while(st<ed){
+
+        }
+
+        if(st>=ed)
+            return;
+
         mergeSort(arr, st, md, sorted);
         mergeSort(arr, md+1, ed, sorted);
 
@@ -118,16 +154,59 @@ public class ArraySort {
         }
     }
 
+    public static void countingSort(int[] arr, int max){
+        int[] count = new int[max+1];
+        for(int i=0; i<arr.length; ++i){
+            count[arr[i]] += 1;
+        }
+        for(int i=1; i<max+1; ++i){
+            count[i] = count[i] + count[i-1];
+        }
+        int j = 0;
+        for(int i=0; i<max+1; ++i){
+            while(j<count[i]){
+                arr[j++]=i;
+            }
+        }
+    }
+
+    /**
+     * @param arr 没有重复元素，非负整数
+     */
+    public static void bitMapSort(int[] arr){
+        BitSet map = new BitSet();
+        for(int i=0; i<arr.length; ++i){
+            map.set(arr[i]);
+        }
+        Queue<Integer> significant = new ArrayDeque<>();
+        map.stream().forEach(significant::add);
+        Integer x;
+        int i=0;
+        while((x = significant.poll()) != null){
+            arr[i++] = x;
+        }
+
+    }
+
     public static void main(String[] args){
-        int[] arr = new int[21];
+        /*int[] arr = new int[5];
+        int[] sortOrder = {4,3,1,5,2};
+
+
         Random rand = new Random(43);
 
-        for(int i=0; i<21; ++i){
+        for(int i=0; i<5; ++i){
             arr[i] = rand.nextInt(100);
         }
         System.out.println("original array");
         Arrays.stream(arr).forEach(x -> System.out.print(x + "\t"));
         System.out.println();
+
+        Map<Integer, Integer> kv = new TreeMap<>();
+        for(int i=0; i<arr.length; ++i)
+            kv.put(sortOrder[i], arr[i]);
+
+        kv.entrySet().forEach(entry-> System.out.println("order: " + entry.getKey() + " value: " + entry.getValue()));*/
 
         /*selectionSort(arr);
         System.out.println("array after selection sort");
@@ -150,11 +229,14 @@ public class ArraySort {
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
         System.out.println();*/
 
-        System.out.println("array after bubbling sort");
+        /*System.out.println("array after bubbling sort");
         bubblingSort(arr);
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
+        System.out.println();*/
+
+        int[] arr ={2,6,1,7,3,1903255523};
+        bitMapSort(arr);
+        Arrays.stream(arr).forEach(x -> System.out.print(x + "\t"));
         System.out.println();
-
-
     }
 }

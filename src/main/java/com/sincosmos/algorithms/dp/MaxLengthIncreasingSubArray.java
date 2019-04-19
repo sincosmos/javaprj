@@ -6,7 +6,7 @@ package com.sincosmos.algorithms.dp;
  * 　　e.g. 1,5,3,4,6,9,7,8的LIS为1,3,4,6,7,8，长度为 6。
  * 解析：设序列为 {arr[0], arr[1],..., arr[n-1]}，记以元素 arr[k] (0<=k<n) 结尾的最长上升子序列的长度为
  *      dp(k), 那么以 arr[k+1] 结尾的最长上升子序列的长度是
- *      if 存在 0<=x<=k 使得 arr[k+1] > arr[x], dp(k+1) = max(dp[x]) + 1
+ *      if 存在 0<=x<=k 使得 arr[k+1] > arr[x], dp(k+1) = max(dp(x)) + 1 （注意这里是 dp(x) 而不是 dp(k))
  *      else dp[k+1] = 1 (即 arr[k+1] 本身构成以它结尾的最长上升子序列)
  */
 public class MaxLengthIncreasingSubArray {

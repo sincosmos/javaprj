@@ -3,7 +3,7 @@ package com.sincosmos.concurrency;
 import java.util.concurrent.*;
 
 public class LatchBarrier {
-    public static void main(String[] args){
+    private static void latch(){
         //serves as a simple on/off latch, or gate
         CountDownLatch startSignal = new CountDownLatch(1);
         //all worker completed
@@ -29,7 +29,38 @@ public class LatchBarrier {
         }
 
         System.out.println("all worker done.");
-        //CyclicBarrier cb
+    }
+
+    private static void barrier(){
+        CyclicBarrier cb = new CyclicBarrier(5, ()->System.out.println("all runner ready"));
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        for(int i=0; i<5; ++i){
+            executor.submit(new Runner(cb));
+        }
+        executor.shutdown();
+    }
+
+    public static void main(String[] args){
+        //latch();
+        barrier();
+    }
+}
+class Runner implements Runnable{
+    private CyclicBarrier cb;
+    public Runner(CyclicBarrier cb){
+        this.cb = cb;
+    }
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " preparing...");
+        try {
+            cb.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName() + " done...");
     }
 }
 

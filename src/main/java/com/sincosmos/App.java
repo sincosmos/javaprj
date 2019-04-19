@@ -1,5 +1,10 @@
 package com.sincosmos;
 
+import ch.hsr.geohash.GeoHash;
+import ch.hsr.geohash.WGS84Point;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
@@ -9,38 +14,59 @@ import java.util.HashMap;
 public class App 
 {
     public static void main( String[] args ) {
+        /*App app = new App();
+        double d = app.distance(GeoHash.fromGeohashString("wx4g0q2v").getPoint(),
+                GeoHash.fromGeohashString("wx4fk77q").getPoint());//wx4g837n
+        System.out.println(d);
 
+        d = app.distance(39.937623, 39.938101, 116.379339, 116.377967, 0, 0);
+        System.out.println(7/2);*/
+        LocalDate end = LocalDate.now().minusDays(1);
+        System.out.println(end.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        System.out.println("a".substring(1) + "--");
     }
-    
-    public int evaluate(String expression){
-    	int sum = 0;
-    	for(String summand : expression.split("\\+")){
-    		sum += Integer.valueOf(summand);
-    	}
-    	return sum;
+
+
+    /**
+     * 计算两 GPS 点之间的距离
+     * @param p1 gps 点
+     * @param p2 gps 点
+     * @return 两点之间的距离，单位为米
+     */
+    private double distance(WGS84Point p1, WGS84Point p2){
+        return distance(p1.getLatitude(), p2.getLatitude(),
+                p1.getLongitude(), p2.getLongitude(), 0.0, 0.0);
     }
 
+    /**
+     * Calculate distance between two points in latitude and longitude taking
+     * into account height difference. If you are not interested in height
+     * difference pass 0.0. Uses Haversine method as its base.
+     *
+     * lat1, lon1 Start point
+     * lat2, lon2 End point
+     * el1 Start altitude in meters
+     * el2 End altitude in meters
+     * @returns Distance in Meters
+     */
+    private double distance(double lat1, double lat2, double lon1,
+                            double lon2, double el1, double el2) {
 
-    static double calculateDistance(double latPoint1, double lngPoint1,
-                             double latPoint2, double lngPoint2) {
-        if(latPoint1 == latPoint2 && lngPoint1 == lngPoint2) {
-            return 0d;
-        }
+        final int R = 6371; // Radius of the earth
 
-        final double EARTH_RADIUS = 6371.0; //km value;
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
 
-        //converting to radians
-        latPoint1 = Math.toRadians(latPoint1);
-        lngPoint1 = Math.toRadians(lngPoint1);
-        latPoint2 = Math.toRadians(latPoint2);
-        lngPoint2 = Math.toRadians(lngPoint2);
+        double height = el1 - el2;
 
-        double distance = Math.pow(Math.sin((latPoint2 - latPoint1) / 2.0), 2)
-                + Math.cos(latPoint1) * Math.cos(latPoint2)
-                * Math.pow(Math.sin((lngPoint2 - lngPoint1) / 2.0), 2);
-        distance = 2.0 * EARTH_RADIUS * Math.asin(Math.sqrt(distance));
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-        return distance; //km value
+        return Math.sqrt(distance);
     }
 }
 

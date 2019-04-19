@@ -15,7 +15,6 @@ class BinarySearch {
         }else {
             return binarySearch(arr, md+1, ed, target);
         }
-
     }
 
 
