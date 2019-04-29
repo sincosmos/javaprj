@@ -1,7 +1,5 @@
 package com.sincosmos.algorithms.leetcode.linkedlist;
 
-import com.sincosmos.algorithms.leetcode.linkedlist.ListNode;
-
 /**
  * Given a non-empty, singly linked list with head node head, return a middle node of linked list.
  *

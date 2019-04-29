@@ -2,7 +2,7 @@ package com.sincosmos.algorithms.leetcode;
 
 import java.util.*;
 
-public class Problem692 {
+public class P692TopKFrequentWords {
     public List<String> topKFrequent1(String[] words, int k) {
         TreeSet<String>[] frequency = new TreeSet[words.length + 1];
         Map<String, Integer> counts = new HashMap<>();

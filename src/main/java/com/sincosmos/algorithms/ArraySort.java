@@ -1,6 +1,7 @@
 package com.sincosmos.algorithms;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ArraySort {
     public static void quickSort(int[] arr, int st, int ed){
@@ -154,19 +155,71 @@ public class ArraySort {
         }
     }
 
-    public static void countingSort(int[] arr, int max){
-        int[] count = new int[max+1];
+    /**
+     * 计数排序
+     * @param arr
+     */
+    public static void countingSort(int[] arr){
+        int min,max;
+        min = max = arr[0];
         for(int i=0; i<arr.length; ++i){
-            count[arr[i]] += 1;
-        }
-        for(int i=1; i<max+1; ++i){
-            count[i] = count[i] + count[i-1];
-        }
-        int j = 0;
-        for(int i=0; i<max+1; ++i){
-            while(j<count[i]){
-                arr[j++]=i;
+            if(arr[i] < min){
+                min = arr[i];
             }
+            if(arr[i] > max){
+                max = arr[i];
+            }
+        }
+        int[] counts = new int[max-min+1];
+        for(int i=0; i<arr.length; ++i){
+            counts[arr[i] - min] += 1;
+        }
+
+        /*
+        * 计算每个元素前面有多少个元素
+        * */
+        for(int i=1; i<counts.length; ++i){
+            counts[i] += counts[i-1];
+        }
+        int[] sorted = new int[arr.length];
+        // To make it stable we are operating in reverse order.
+        for(int i=arr.length-1; i>=0; --i){
+            //比 arr[i] 小的元素有 counts[arr[i] - min] - 1 个
+            //因此 arr[i] 排序后的下标是 counts[arr[i] - min] - 1;
+            sorted[counts[arr[i] - min] - 1] = arr[i];
+            counts[arr[i] - min]--;
+        }
+
+        //下面的方式是正确的，但是相等的元素的顺序会发生改变
+        /*for(int i=0; i<arr.length; ++i){
+            sorted[counts[arr[i] - min] - 1] = arr[i];
+            counts[arr[i] - min]--;
+        }*/
+        System.arraycopy(sorted, 0, arr, 0, arr.length);
+    }
+
+
+    /**
+     * Input:
+     * A list of unsorted data (between 0 and 1): 0.25 0.36 0.58 0.41 0.29 0.22 0.45 0.79 0.01 0.69
+     * Array before Sorting: 0.25 0.36 0.58 0.41 0.29 0.22 0.45 0.79 0.01 0.69
+     * Output:
+     * Array after Sorting: 0.01 0.22 0.25 0.29 0.36 0.41 0.45 0.58 0.69 0.79
+     * @param arr
+     */
+    public static void bucketSort(double[] arr){
+        //平均每个桶 5 个元素
+        int num = arr.length / 5 + 1;
+        // num 个桶，每个桶中至多有 arr.length 个元素
+        ArrayList[] buckets = new ArrayList[num];
+        for(int i=0; i<num; ++i){
+            buckets[i] = new ArrayList();
+        }
+
+        int bucketIndex = -1;
+        for(int i=0; i<arr.length; ++i){
+            // num * (arr[i] - min) / (max - min) - 1
+            bucketIndex = (int) Math.floor(arr[i] * num);
         }
     }
 
@@ -178,14 +231,16 @@ public class ArraySort {
         for(int i=0; i<arr.length; ++i){
             map.set(arr[i]);
         }
-        Queue<Integer> significant = new ArrayDeque<>();
+        /*Queue<Integer> significant = new ArrayDeque<>();
         map.stream().forEach(significant::add);
         Integer x;
         int i=0;
         while((x = significant.poll()) != null){
             arr[i++] = x;
-        }
+        }*/
 
+        AtomicInteger idx = new AtomicInteger(0);
+        map.stream().forEach(v->arr[idx.getAndIncrement()] = v);
     }
 
     public static void main(String[] args){
@@ -234,8 +289,8 @@ public class ArraySort {
         Arrays.stream(arr).forEach( x -> System.out.print(x + "\t"));
         System.out.println();*/
 
-        int[] arr ={2,6,1,7,3,1903255523};
-        bitMapSort(arr);
+        int[] arr ={2,6,1,7,3,-2,3,7,-1,-2};
+        countingSort(arr);
         Arrays.stream(arr).forEach(x -> System.out.print(x + "\t"));
         System.out.println();
     }

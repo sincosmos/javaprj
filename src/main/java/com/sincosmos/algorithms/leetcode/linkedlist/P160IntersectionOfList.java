@@ -12,17 +12,37 @@ import com.sincosmos.algorithms.leetcode.linkedlist.ListNode;
  */
 public class P160IntersectionOfList {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        while(headA != null){
-            ListNode cur = headB;
-            while(cur!=null){
-                if(cur == headA){
-                    return cur;
-                }else{
-                    cur = cur.next;
+        if(headA == null || headB == null) return null;
+        ListNode pa = headA, pb = headB;
+        while(pa != null && pb  != null){
+            if(pa == pb) return pa;
+            else{
+                pa = pa.next;
+                pb = pb.next;
+            }
+        }
+        if(pa == null && pb!=null) {
+            pa = headB;
+            while(pa != null){
+                if(pb == null) pb = headA;
+                if(pa == pb) return pa;
+                else{
+                    pa = pa.next;
+                    pb = pb.next;
                 }
             }
-            headA = headA.next;
+        }else if(pb==null && pa!=null) {
+            pb = headA;
+            while(pb != null){
+                if(pa==null) pa=headB;
+                if(pa == pb) return pa;
+                else{
+                    pa = pa.next;
+                    pb = pb.next;
+                }
+            }
         }
+
         return null;
     }
 }

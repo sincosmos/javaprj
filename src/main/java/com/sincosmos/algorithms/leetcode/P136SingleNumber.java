@@ -1,8 +1,10 @@
 package com.sincosmos.algorithms.leetcode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 /*
     Given a non-empty array of integers, every element appears twice except for one. Find that single one.
@@ -40,5 +42,13 @@ public class P136SingleNumber {
         }
 
         return count.pollFirst();
+    }
+
+    public int singleNumber3(int[] nums) {
+        int rtn = 0;
+        for(int num : nums){
+            rtn ^= num;
+        }
+        return rtn;
     }
 }

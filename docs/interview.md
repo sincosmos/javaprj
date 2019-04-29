@@ -59,9 +59,14 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 4) The leaf nodes of a B+ tree are linked together in the form of a singly linked lists to make the search queries more efficient.  
 5) 为什么 Mysql 索引用 B+ 树而不是 B 树？B 树的节点需要存储数据，而 B+ 树只有叶子结点存储数据，这样在节点大小（通常是磁盘页的大小）一定的情况下，B 树内部节点能存储的索引数量就大大少于 B+ 树内部节点存储的索引的数量，导致同样的检索，B 树很可能要读更多的页，即磁盘 IO 次数回增多，检索效率下降。另外 B+ 树的叶子节点会顺序存储下一个叶子节点的地址指针，在区间访问时，能够进一步减少磁盘 IO 次数。
 6) 假设在表 A 上经常用到的两个查询语句是 select colx from A where col2=? and col1=? 和 select coly from A where col1 like 'sample%'，应该怎么建立索引比较好？可以考虑建立一个联合索引，create index composite_index_cols on A (col1, col2)。对于前者来说，SQL 解析器会自动调整两个条件的顺序，这样两个查询都能用到这个索引，加快查询效率。
+7) MyISAM 的主键索引和非主键索引都是非聚簇索引，叶子节点数据区存放的都是数据地址；InnoDB 的主键索引是聚簇索引，叶子节点的数据就是数据本身，非主键索引是非聚簇索引，数据区存放的是主键。因此 MyISAM 表可以没有主键，而 InnoDB 的表如果不指定主键，则会由存储引擎生成一个全局的 rowid 序列作为主键，所有不指定主键的表共享同一个 rowid 序列，并发性能差，因此一般都需要指定主键。
+8) 索引是存储引擎级别的实现，不同的存储引擎可能采用不同的索引类型和实现方式。B+ 树是大多数 mysql 存储引擎默认的索引类型。
+9) 联合索引实际上是按照联合索引的第一列建立 B+ 树，非叶子节点上的 key 是第一列的值，叶子节点上保存了联合索引中所有列的值并按照第一列、第二列...依次排序。
 ### 事务
 参考资料[CS-Notes 数据库原理](https://cyc2018.github.io/CS-Notes/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86)
 ### 索引优化
+参考资料 [mysql 优化](http://blog.codinglabs.org/articles/theory-of-mysql-index.html)
+1) mysql 查询时，如果索引列是表达式的一部分或函数的参数，将不会使用索引，例如 select * from tab where id+1=5, select * from tab where len(id) = 3
 ## 主从数据库
 1)  随着用户量的增多，我们可以将数据库的读写分离，使用主库（Master)负责写，若干个从库与主库同步更新数据，用户从从库读数据。写操作发生后，从库同步主库会有一定的延迟。在程序实现方面，可以借助 Spring AOP 组件实现写主库，读请求读从库。当只有读操作的时候，直接操作读库（从库），当在写事务（即写主库）中读时，强制走从库，即先暂停写事务，开启读（读从库），然后恢复写事务。此方案其实是使用事务传播行为为：NOT_SUPPORTS解决的。
 ## 分库分表
@@ -72,5 +77,25 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 分库分表后，应当尽量避免跨库 join，可以采用增加数据冗余的方式来解决该问题。
 ## ElasticSearch
 ## Redis
+### 基本数据结构
+参考资料 [Redis 数据结构基础教程](https://juejin.im/post/5b53ee7e5188251aaa2d2e16)
+1) string 是一个可变的字节数组，常见的操作有 set, get, strlen, getrange, setrange, append, ttl, expire, del. 如果存入的是整数，还可以作为计数器使用，incrby, decrby, incr, decr. 使用 setbit, getbit, bitcount, bitop (bitop and/or/xor destkey key [key...]) 命令可以将 string 类型作为 bit map 使用。
+2) redis 使用双向链表结构保存列表，是以列表结构为 list。因为是双链表，list 即可作为队列(lpush/rpop, rpush/lpop)使用，也可以作为堆栈(rpush/rpop, lpush/lpop)使用。用 list 可以实现 redis 消息队列（ redis 另外提供了发布/订阅机制实现消息队列)。list 的 push 支持一次操作多个元素（实际 push 是依次一个一个进行的），pop 操作一次只能弹出一个元素。list 常见的其它操作有 llen (list length), lindex (get element by index), lrange (get elements by range of indices), lset (set element by index), linsert before/after (insert element before/after sepcified element), lrem count (if count > 0, search from head, remove count of elements; if count < 0, search from tail, remove count of elements; if count = 0, remove all elements), ltrim (维护定长列表，除了范围内的元素外，其它元素将被删除)
+3) hash 等价于 java 中的 HashMap，存储的是键值对。使用 hset (hset v_name key1 value 一次加入一个键值对)或 hmset（hmset v_name key2 value2 key3 value3... 一次加入多个键值对）。hdel 支持一次删除一个或多个键。hget 获得键对应的值，hexists 判断键是否存在于 hash 中。如果键对应的值是整数，我们也可以将整数作为计数器使用，相关的命令有 hincrby, hdecrby。hgetall 得到 hash 中所有的键值对。
+4) 类似 java, redis set 的内部实现也是基于上面的 hash，所有的键指向同一个内部值。常见的命令有 sadd (增加一个或多个元素)，members (获得所有元素)，scard (获得元素个数)，srandmember v_name [count]（随机获取 count 个元素，如果省略 count，随机取一个元素），srem v_name key1 key2 (删除一个或多个元素)，spop（随机删除一个元素），sismember （判断元素是否在 set 中）
+5) zset 是 redis 提供的有序集合，可以将其理解为 map<key, score>，除了 hash 结构，为了提高增删查改的效率，底层还使用了 skiplist 结构，skiplist 按照 score 进行排序，score 可以是整数或浮点数。常用的命令有 zadd v_name score key (增加一个或多个元素)，zcard (获取元素个数)，zrem (删除一个或者多个元素)，zincrby v_name 1.2 key1 (作为计数器使用)，zscore (获取对应 key 的权重)，zrank (获得元素的正向排名)，zrevrank（获得元素的倒数排名），zrange v_name start end [withscores]（获得正向排名从 start 到 end 的所有元素，可选是否同时获得元素对应的 scores），zrevrange 和 zrange 类似，只不过它按负向排名输出元素。zrangebyscore v_name score_start score_ed [withscores] 和 zrevrangebyscore 获取指定 score 范围内的元素。zremrangebyrank 和 zremrangebyscore 分别删除指定排名范围内和权重范围内的元素。
+### 发布/订阅模式
+1) subscribe channel [channel ...]，订阅给定的频道列表
+2) publish channel message ，将消息发送到指定的频道
+3) unsubscribe channel [channel ...]，退订给定的频道列表
+4) psubscribe pattern [pattern ...]，订阅符合给定模式的频道列表
+5) punsubscribe pattern [pattern ...]，退订符合给定模式的频道列表
+6) pubsub <subcommand> [argument [argument ...]] 查看订阅与发布系统状态，它由数个不同格式的子命令组成。
+### 分布式锁
+1) setex key timeout(s) value，设置 key 并并设置过期时间，整个过程是原子操作
+2) setnx key value, 当指定的 key 不存在时，为 key 设置指定的值
+3）getset key value, 将 value 赋值给 key，并返回旧值，如果旧值不存在返回 nil，如果旧值不是字符串类型，返回错误
+
+### 配置文件
 
 

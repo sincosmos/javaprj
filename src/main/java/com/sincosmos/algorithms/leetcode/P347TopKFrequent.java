@@ -3,7 +3,7 @@ package com.sincosmos.algorithms.leetcode;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class Problem347 {
+public class P347TopKFrequent {
     public List<Integer> topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> counts = new HashMap<>();
         IntStream.of(nums).forEach(x->{
