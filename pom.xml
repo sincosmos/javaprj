@@ -7,6 +7,8 @@
   <version>1.0-SNAPSHOT</version>
   <name>javaprj</name>
   <url>http://maven.apache.org</url>
+
+  <properties/>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -62,11 +64,35 @@
       </dependency>
 
       <dependency>
+          <groupId>cglib</groupId>
+          <artifactId>cglib</artifactId>
+          <version>3.2.5</version>
+      </dependency>
+
+      <dependency>
           <groupId>joinery</groupId>
           <artifactId>joinery-dataframe</artifactId>
           <version>1.9</version>
       </dependency>
 
+      <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-jfs</artifactId>
+          <version>1.0.0</version>
+      </dependency>
+
+      <dependency>
+          <artifactId>aws-java-sdk-s3</artifactId>
+          <groupId>com.amazonaws</groupId>
+          <optional>false</optional>
+          <version>1.11.490</version>
+      </dependency>
+      <dependency>
+          <artifactId>aws-java-sdk-core</artifactId>
+          <groupId>com.amazonaws</groupId>
+          <optional>false</optional>
+          <version>1.11.490</version>
+      </dependency>
   </dependencies>
   
 	<build>  

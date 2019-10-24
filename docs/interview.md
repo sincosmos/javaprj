@@ -41,8 +41,19 @@ ConcurrentHashMap, ArrayBlockingQueue (A bounded blocking queue backed by an arr
 ### java.util.concurrent 包 CountDownLatch
 A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
 
+
+# 软件设计
+## 面向对象
+1. 面向对象的三个基本特征：封装（private, public, protected，只暴露对外的 API）、继承（泛化，组合/聚合）、多态（覆盖）
+2. 设计原则。单一职责原则（每个模块职责单一。高内聚：每个模块独立完成自己的功能；低耦合：减少模块间交互的复杂度）；里氏替换原则（程序中，子类必须能替换他们的基类而不会引起程序错误。不要破坏继承体系，子类可以扩展父类功能，但不要覆盖父类的非抽象方法。如果非要重写父类的方法，比较通用的做法应该是改变类的的继承结构，使原来的父类和子类都继承一个更抽象的父类，去掉原来的继承关系，采用依赖、聚合、组合等关系实现）；依赖倒置原则（面向接口编程，抽象不应该依赖细节）；接口隔离原则（多个专用接口优于一个单一的通用接口，例如函数式接口）；开闭原则（一个类、模块或函数应该对扩展开放，对修改关闭）
+3. 依赖：一个类 A 的方法使用到了另一个类 B，B 的变化会影响到 A，但这种影响是较弱的；关联：两个类或者类与接口之间一种强依赖关系，例如类 A 中有一个属性是类 A 的实例；聚合：比关联更强的，是整体与部分的关系，多个整体可以共享组件；组合：比聚合更强，整体和组件拥有相同的生命周期，多个整体不能共享组件（少继承，多组合，组合可以被说成”我请了个老头在我家里干活” ，继承则是“我父亲在家里帮我干活”）。
+## 领域驱动模型
+简单地说，软件开发不是一蹴而就的事情，我们不可能在不了解产品（或行业领域）的前提下进行软件开发，在开发前，通常需要进行大量的业务知识梳理，而后到达软件设计的层面，最后才是开发。而在业务知识梳理的过程中，我们必然会形成某个领域知识，根据领域知识来一步步驱动软件设计，就是领域驱动设计的基本概念。而领域驱动设计的核心就在于建立正确的领域驱动模型。
+
 # 常见框架
-### Spring
+## Spring
+### Spring AOP 与事务
+1. 对于没有实现接口的类，Spring 利用 cglib 提供的代理策略，其底层原理是继承被代理类生成代理类，但代理类并不需要开发人员显式定义。开发人员借助 MthodInterceptor 接口定义被代理类中需要植入被代理的方法的操作（例如打印日志，增加事务等），借助 Enhancer 类来创建代理类实例。
 
 # 网络基础
 ## HTTP和TCP协议
@@ -51,31 +62,20 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 
 # 数据存储
 ## MySQL 数据库
-### 存储引擎与索引原理
-参考资料 [MySQL索引背后的数据结构及算法原理](http://blog.codinglabs.org/articles/theory-of-mysql-index.html)  
-1) MySQL 常用的存储引擎有 MyISAM 和 InnoDB。前者不支持事务，在更新时使用表级锁，查询速度很快，适合更新少，查询多的业务场景；后者支持事务和行级锁，因此更适合并发操作和更新较多的业务场景。另外，MyISAM 不支持外键关联。  
-2) B-tree is a fat tree. The height of B-Trees is kept low by putting maximum possible keys in a B-Tree node. Generally, a B-Tree node size is kept equal to the disk block size. Since h is low for B-Tree, total disk accesses for most of the operations are reduced significantly compared to balanced Binary Search Trees like AVL Tree, Red-Black Tree, ..etc.  
-3) In B Tree, Keys and records both can be stored in the internal as well as leaf nodes. Whereas, in B+ tree, records (data) can only be stored on the leaf nodes while internal nodes can only store the key values.
-4) The leaf nodes of a B+ tree are linked together in the form of a singly linked lists to make the search queries more efficient.  
-5) 为什么 Mysql 索引用 B+ 树而不是 B 树？B 树的节点需要存储数据，而 B+ 树只有叶子结点存储数据，这样在节点大小（通常是磁盘页的大小）一定的情况下，B 树内部节点能存储的索引数量就大大少于 B+ 树内部节点存储的索引的数量，导致同样的检索，B 树很可能要读更多的页，即磁盘 IO 次数回增多，检索效率下降。另外 B+ 树的叶子节点会顺序存储下一个叶子节点的地址指针，在区间访问时，能够进一步减少磁盘 IO 次数。
-6) 假设在表 A 上经常用到的两个查询语句是 select colx from A where col2=? and col1=? 和 select coly from A where col1 like 'sample%'，应该怎么建立索引比较好？可以考虑建立一个联合索引，create index composite_index_cols on A (col1, col2)。对于前者来说，SQL 解析器会自动调整两个条件的顺序，这样两个查询都能用到这个索引，加快查询效率。
-7) MyISAM 的主键索引和非主键索引都是非聚簇索引，叶子节点数据区存放的都是数据地址；InnoDB 的主键索引是聚簇索引，叶子节点的数据就是数据本身，非主键索引是非聚簇索引，数据区存放的是主键。因此 MyISAM 表可以没有主键，而 InnoDB 的表如果不指定主键，则会由存储引擎生成一个全局的 rowid 序列作为主键，所有不指定主键的表共享同一个 rowid 序列，并发性能差，因此一般都需要指定主键。
-8) 索引是存储引擎级别的实现，不同的存储引擎可能采用不同的索引类型和实现方式。B+ 树是大多数 mysql 存储引擎默认的索引类型。
-9) 联合索引实际上是按照联合索引的第一列建立 B+ 树，非叶子节点上的 key 是第一列的值，叶子节点上保存了联合索引中所有列的值并按照第一列、第二列...依次排序。
-### 事务
-参考资料[CS-Notes 数据库原理](https://cyc2018.github.io/CS-Notes/#/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86)
-### 索引优化
-参考资料 [mysql 优化](http://blog.codinglabs.org/articles/theory-of-mysql-index.html)
-1) mysql 查询时，如果索引列是表达式的一部分或函数的参数，将不会使用索引，例如 select * from tab where id+1=5, select * from tab where len(id) = 3
-## 主从数据库
-1)  随着用户量的增多，我们可以将数据库的读写分离，使用主库（Master)负责写，若干个从库与主库同步更新数据，用户从从库读数据。写操作发生后，从库同步主库会有一定的延迟。在程序实现方面，可以借助 Spring AOP 组件实现写主库，读请求读从库。当只有读操作的时候，直接操作读库（从库），当在写事务（即写主库）中读时，强制走从库，即先暂停写事务，开启读（读从库），然后恢复写事务。此方案其实是使用事务传播行为为：NOT_SUPPORTS解决的。
-## 分库分表
-1）随着用户量的大幅度增多和历史数据的积累，一个 master 不能满足高并发的写需求，而全量的数据放在一个表/数据库里也会因为数据量过大导致查询性能下降，这时候我们就要考虑分库分表了。
-分库主要解决单个数据库性能问题。垂直分库在微服务盛行的今天非常受欢迎。基本的思路就是按照业务模块划分出来不同的数据库，而不是像早期那样将所有的数据表都放在同一个数据库中。例如电商网站中，订单表、用户表、商品表等都分别放在不同的数据库里。不同的数据库可能位于不同的机器上。
-分表一般有水平拆分和垂直拆分两种分法。水平分表就是将某个表的数据按行拆分，分别保存到不同的表中，例如 id（主键） 是 1 ～ 1000万的行在一个表，id 是 1000万 ～ 2000万的行在下一个表，依次拆分。根据表数据的大小，这些表都在同一个数据库（不建议使用），也可以位于不同的数据库中（即分库分表同时使用）。当然，实际水平分表的策略可能是通过主键或者时间等字段进行 hash 和取模后进行拆分。垂直拆分指将数据表的列拆分到不同的表中，使拆分后的每个表拥有较少的列，通常可以把较大的字段单独保存到一个表中，常用的字段和不常用的字段也分开到不同的表中。
-如果是因为表多而数据多，使用垂直切分，根据业务切分成不同的库。如果是因为单张表的数据量太大，这时要用水平切分，即把表的数据按某种规则切分成多张表，甚至多个库上的多张表。 分库分表的顺序应该是先垂直分，后水平分。 因为垂直分更简单，更符合我们处理现实世界问题的方式。
-分库分表后，应当尽量避免跨库 join，可以采用增加数据冗余的方式来解决该问题。
+[MySQL]()
 ## ElasticSearch
+### 架构原理
+ES 是近实时分布式搜索引擎，底层基于 Lucene 实现，核心思想是在多台机器上启动多个 ES 进程实例，构成 ES 集群。
+### 数据写入
+1. 客户端选择一个 node 发送写请求，这个 node 将作为 coordinating node
+2. Coordinating node 根据 document ID （可以指定，也可以由服务器分配）对 document 进行路由计算，将内容转发给相应的 node 作为保存数据 primary shard 的节点
+3. Primary shard 保存到相应的 node 上后，相应的 node 负责将数据同步到 replica node
+4. Coordinating node 发现 Primary node 和所有的 replica node 都完成后，返回请求到客户端
+写入时，数据先写入到 buffer 里，同时将数据写入到 translog 中（异步将数据同步到磁盘），在 buffer 里的数据是不会出现在检索结果中；
+### 数据检索
+根据 document ID 检索时，接受请求的 node (coordinating node) 将对 document 进行路由，将请求转发到对应的 node，获取数据。根据关键字进行检索时，coordinating node 将搜索请求转发给所有的分片机器（Primary or replica）；每一个分片都将自己的搜索结果的唯一标识返回给 coordinating node，由其对数据合并、排序、分页等操作，产出最后的结果；最后 coordinating node 再根据唯一标识去各个节点拉去数据，返回给客户端。
+### 倒排索引
+ES 分别为每个 field 都建立了一个倒排索引，根据针对 field 的分词策略，每一个值可能被拆分成许多个 term 对应相应的 posting list（即 term 出现了的 document ID 列表）。这样，一个 ES 索引可能会出现非常多的 term，为了快速定位某个 term，ES 将所有的 term 进行排序，使用二分法查找 term。但由于 term 太多，全部读入内存也会有较大消耗，于是有了 term index（缓存在内存），即取 term 的前缀建立一棵搜索树，通过 term index 快速定位到以某个前缀开头的 term 的 offset，然后从 offset 开始往后顺序查找，就会很快找到相应的 term。
 ## Redis
 ### 基本数据结构
 参考资料 [Redis 数据结构基础教程](https://juejin.im/post/5b53ee7e5188251aaa2d2e16)
@@ -97,5 +97,9 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 3）getset key value, 将 value 赋值给 key，并返回旧值，如果旧值不存在返回 nil，如果旧值不是字符串类型，返回错误
 
 ### 配置文件
+
+## Spark SQL 内核剖析
+1. 相比传统的 MapReduce，spark 提供了更加灵活的数据操作方式，有些需要分解成几轮的 MapReduce 操作，可以在 Spark 里一轮实现；另一方面，每轮的计算结果都可以分布式地存放在内存中，下一轮直接从内存读取，节省大量磁盘 IO 开销。
+2. SQL-on-Hadoop 解决方案从架构上来看从上到下分为应用层（为用户提供数据管理查询接口），分布式执行层（例如 MapReduce, Spark 计算引擎等），存储层（HDFS, 分布式 NoSQL 数据库等，分布式执行层通过底层接口访问存储层中的数据）。
 
 

@@ -14,16 +14,22 @@ import java.util.HashMap;
 public class App 
 {
     public static void main( String[] args ) {
-        /*App app = new App();
-        double d = app.distance(GeoHash.fromGeohashString("wx4g0q2v").getPoint(),
+        App app = new App();
+        /*double d = app.distance(GeoHash.fromGeohashString("wx4g0q2v").getPoint(),
                 GeoHash.fromGeohashString("wx4fk77q").getPoint());//wx4g837n
         System.out.println(d);
 
         d = app.distance(39.937623, 39.938101, 116.379339, 116.377967, 0, 0);
         System.out.println(7/2);*/
-        LocalDate end = LocalDate.now().minusDays(1);
+        /*LocalDate end = LocalDate.now().minusDays(1);
         System.out.println(end.format(DateTimeFormatter.ISO_LOCAL_DATE));
-        System.out.println("a".substring(1) + "--");
+        System.out.println("a".substring(1) + "--");*/
+        WGS84Point p = GeoHash.fromGeohashString("wxhft0hu").getPoint();
+        System.out.println(p.getLatitude());
+        System.out.println(p.getLongitude());
+        //System.out.println(app.distance(p.getLatitude(), 39.851074, p.getLongitude(), 116.417501, 0.0, 0.0));
+        System.out.println(0.0D / 0.0);
+        double a = 0.0D / 0.0;
     }
 
 
@@ -49,7 +55,7 @@ public class App
      * el2 End altitude in meters
      * @returns Distance in Meters
      */
-    private double distance(double lat1, double lat2, double lon1,
+    public double distance(double lat1, double lat2, double lon1,
                             double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
