@@ -70,18 +70,6 @@
       </dependency>
 
       <dependency>
-          <groupId>joinery</groupId>
-          <artifactId>joinery-dataframe</artifactId>
-          <version>1.9</version>
-      </dependency>
-
-      <dependency>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>hadoop-jfs</artifactId>
-          <version>1.0.0</version>
-      </dependency>
-
-      <dependency>
           <artifactId>aws-java-sdk-s3</artifactId>
           <groupId>com.amazonaws</groupId>
           <optional>false</optional>
@@ -93,6 +81,7 @@
           <optional>false</optional>
           <version>1.11.490</version>
       </dependency>
+
   </dependencies>
   
 	<build>  

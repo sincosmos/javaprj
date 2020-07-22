@@ -75,13 +75,13 @@ public class PowerSet {
     }
 
     public static void main(String[] args){
-        Set<Integer> set = new HashSet<>(Arrays.asList(9,6,7,8,11,134,13,14,15,16));//,18,19,20,21,22,23,24,36,38,39
+        /*Set<Integer> set = new HashSet<>(Arrays.asList(9,6,7,8,11,134,13,14,15,16));//,18,19,20,21,22,23,24,36,38,39
         long st, ed;
-        /*st = System.currentTimeMillis();
+        *//*st = System.currentTimeMillis();
         Set<Set<? extends Number>> powerSet1 = PowerSet.recursivePowerSetMoreToLess(set);
         ed = System.currentTimeMillis();
         System.out.println("recursivePowerSetMoreToLess(ms):: " + (ed-st));
-        System.out.println((powerSet1.size()));*/
+        System.out.println((powerSet1.size()));*//*
         //powerSet1.forEach(System.out::println);
 
         st = System.currentTimeMillis();
@@ -96,6 +96,12 @@ public class PowerSet {
         ed = System.currentTimeMillis();
         System.out.println("powerSet(ms):: " + (ed-st));
         System.out.println((powerSet3.size()));
-        //powerSet3.forEach(System.out::println);
+        //powerSet3.forEach(System.out::println);*/
+
+        int[] nums = {1,2,3};
+        PowerSetAgain p = new PowerSetAgain();
+        //p.powerSet(nums).forEach(System.out::println);
+
+        System.out.println(p.powerSet(nums));
     }
 }

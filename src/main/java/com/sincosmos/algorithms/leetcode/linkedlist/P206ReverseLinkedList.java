@@ -15,14 +15,19 @@ import com.sincosmos.algorithms.leetcode.linkedlist.ListNode;
  */
 public class P206ReverseLinkedList {
     public ListNode reverseList(ListNode head) {
-        if(head==null || head.next == null) return head;
-        ListNode cur = head, newHead = null, tmpHead;
+        ListNode newHead = null, cur = head, remainingHead;
+
         while(cur != null){
-            tmpHead = cur.next;
+            //save head of the remaining part
+            remainingHead = cur.next;
+            //reverse, cur.next -> head of the reversed part
             cur.next = newHead;
+            //update new head
             newHead = cur;
-            cur = tmpHead;
+            //go on with the remaining part
+            cur = remainingHead;
         }
+
         return newHead;
     }
 
