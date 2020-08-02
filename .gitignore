@@ -5,3 +5,7 @@
 .classpath
 .settings
 .idea
+*weekly*
+*.iml
+.idea
+target

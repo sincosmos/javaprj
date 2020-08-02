@@ -1,0 +1,90 @@
+
+Go
+
+    Documents
+    Packages
+    The Project
+    Help
+
+Documentation
+
+The Go programming language is an open source project to make programmers more productive.
+
+Go is expressive, concise, clean, and efficient. Its concurrency mechanisms make it easy to write programs that get the most out of multicore and networked machines, while its novel type system enables flexible and modular program construction. Go compiles quickly to machine code yet has the convenience of garbage collection and the power of run-time reflection. It's a fast, statically typed, compiled language that feels like a dynamically typed, interpreted language.
+Installing Go
+Getting Started
+
+Instructions for downloading and installing the Go compilers, tools, and libraries.
+Learning Go
+A Tour of Go
+
+An interactive introduction to Go in three sections. The first section covers basic syntax and data structures; the second discusses methods and interfaces; and the third introduces Go's concurrency primitives. Each section concludes with a few exercises so you can practice what you've learned. You can install it locally with:
+
+$ go get golang.org/x/tour
+
+This will place the tour binary in your workspace's bin directory.
+How to write Go code
+
+This doc explains how to develop a simple set of Go packages inside a module, and it shows how to use the go command to build and test packages.
+Editor plugins and IDEs
+
+A document that summarizes commonly used editor plugins and IDEs with Go support.
+Effective Go
+
+A document that gives tips for writing clear, idiomatic Go code. A must read for any new Go programmer. It augments the tour and the language specification, both of which should be read first.
+Diagnostics
+
+Summarizes tools and methodologies to diagnose problems in Go programs.
+Frequently Asked Questions (FAQ)
+
+Answers to common questions about Go.
+The Go Wiki
+
+A wiki maintained by the Go community.
+More
+
+See the Learn page at the Wiki for more Go learning resources.
+References
+Package Documentation
+
+The documentation for the Go standard library.
+Command Documentation
+
+The documentation for the Go tools.
+Language Specification
+
+The official Go Language specification.
+The Go Memory Model
+
+A document that specifies the conditions under which reads of a variable in one goroutine can be guaranteed to observe values produced by writes to the same variable in a different goroutine.
+Release History
+
+A summary of the changes between Go releases.
+Articles
+Codewalks
+
+Guided tours of Go programs.
+
+    First-Class Functions in Go
+    Generating arbitrary text: a Markov chain algorithm
+    Share Memory by Communicating
+    Writing Web Applications - building a simple web application.
+
+Tools
+
+    About the Go command - why we wrote it, what it is, what it's not, and how to use it.
+    Debugging Go Code with GDB
+    Data Race Detector - a manual for the data race detector.
+    A Quick Guide to Go's Assembler - an introduction to the assembler used by Go.
+
+More
+
+See the Articles page at the Wiki for more Go articles.
+Non-English Documentation
+
+See the NonEnglish page at the Wiki for localized documentation.
+The Go Gopher
+
+    Copyright Terms of Service Privacy Policy Report a website issue
+
+Supported by Google
