@@ -1,2 +1,7 @@
 .metadata
 *.[oa]
+/target/
+.project
+.classpath
+.settings
+.idea

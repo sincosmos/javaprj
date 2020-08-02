@@ -1,13 +1,13 @@
 package com.sincosmos.designpattern.factory.abstractfactory.product;
 
 /*
- * жпндсно╥Ё║╬╟
+ * О©╫О©╫О©╫О©╫О©╫О©╫о╥О©╫О©╫О©╫О©╫
  * */
 public class ChnScene implements Scene {
 
 	@Override
 	public void describe() {
-		System.out.println("жпндЁ║╬╟к╣цВ");
+		System.out.println("О©╫О©╫О©╫дЁО©╫О©╫О©╫к╣О©╫О©╫");
 	}
 
 }
