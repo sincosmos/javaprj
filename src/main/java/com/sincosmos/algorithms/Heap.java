@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
  * 1) 大顶堆要求对于堆中任意一个元素，其值不小于其左、右子节点的元素值，不大于其父节点的元素值
  * 2) 小顶堆要求对于堆中任意一个元素，其值不大于其左、右子节点的元素值，不小于其父节点的元素值
  * 根据堆的性质，我们很容易知道大顶堆堆顶元素（下标 0）一定是数组的最大值；小顶堆堆顶元素（下标0）一定是数组的最小值。
- * 注意，大顶堆和小顶堆的数组元素不一定（很可能）不是有序的。
+ * 注意，大顶堆和小顶堆的数组元素不一定（很可能不）是有序的。
  *
  * 数组堆化
  * 数组堆化的过程，就是调整数组中元素的顺序，使每个元素都满足堆的性质的过程。
@@ -328,7 +328,50 @@ public class Heap {
         Heap.heapAscSort(arr);
         IntStream.of(arr).forEach((x)->{System.out.print(x + "\t");});
         Heap.topK(10, arr);
+    }
 
+    /**
+     * 小顶堆实现数据降序排序
+     * @param arr
+     */
+    public static void headDescSort(int [] arr){
+        int heapPart = arr.length - 1;
+        while(heapPart > 0){
+            heap(arr, heapPart);
+            swap(arr, 0, heapPart);
+            heapPart--;
+        }
 
     }
+
+    private static void heap(int[] arr, int ed) {
+        int root = (ed + 1) / 2;
+        int left, right, min;
+        while(root >= 0){
+            left = 2 * root + 1;
+            right = 2 * root + 2;
+            if(right <= ed && arr[left] < arr[right]){
+                min = right;
+            }else{
+                min = left;
+            }
+            if(arr[root] > arr[min]){
+                swap(arr, root, min);
+
+                while(min <= (ed + 1) / 2){
+                    int l = 2 * min + 1;
+                    int r = 2 * min + 2;
+                    if(r<=ed && arr[l] < arr[right]){
+                        min = r;
+                    }else{
+                        min = l;
+                    }
+
+                }
+            }
+
+            root--;
+        }
+    }
+
 }

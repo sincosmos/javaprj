@@ -1,4 +1,4 @@
-package com.sincosmos.algorithms.leetcode;
+package com.sincosmos.algorithms.leetcode.tree;
 
 import java.util.*;
 

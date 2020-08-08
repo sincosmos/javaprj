@@ -1,7 +1,5 @@
 package com.sincosmos.algorithms.leetcode.linkedlist;
 
-import com.sincosmos.algorithms.leetcode.linkedlist.ListNode;
-
 /**
  * Reverse a singly linked list.
  *

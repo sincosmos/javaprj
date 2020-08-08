@@ -70,4 +70,23 @@ public class P692TopKFrequentWords {
         Collections.reverse(rtn);
         return rtn;
     }
+
+    public List<String> topKFrequentCorrect(String[] words, int k) {
+        Map<String, Integer> counts = new HashMap<>();
+        //小顶堆，（优先级）较小的元素在前面
+        PriorityQueue<String> heap = new PriorityQueue<>(Comparator.comparing(counts::get).reversed());
+        Arrays.asList(words).forEach(x -> {
+            counts.put(x, counts.getOrDefault(x, 0) + 1);
+            if(heap.size() < k) heap.add(x);
+            else{
+                if(counts.get(heap.peek()) < counts.get(x)){
+                    heap.poll();
+                    heap.add(x);
+                }
+            }
+        });
+
+
+        return new ArrayList(heap);
+    }
 }

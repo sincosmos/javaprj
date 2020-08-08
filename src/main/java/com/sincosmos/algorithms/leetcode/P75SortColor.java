@@ -27,10 +27,10 @@ public class P75SortColor {
                 // firstTwo 之后的元素都确定是 2，firstTwo 指向从后往前第一个不确定是否是 2 的元素
                 firstTwo--;
                 // 交换后，因为不确定 i 指向位置是几，因此 i 指向不变，下一个循环继续操作 nums[i】
-                // 但由于循环跳出条件是 i<=firstTwo，firstTwo 减小导致循环元素个数仍然是 arr.length
+                // 但由于循环跳出条件是 i<=firstTwo，firstTwo 减小导致总的循环元素个数仍然是 arr.length
                 continue;
             }else if(nums[i] == 0){
-                // nums[i] 与从前往后最后一个不确定是 0 的元素交换位置
+                // nums[i] 与从前往后最后一个不确定是否为 0 的元素交换位置
                 // 交换前，lastZero 指向的元素一定不会是 2，因为 [lastZero, i) 之间的 2 都已经被交换到后面
                 // 因此，交换后的 nums[i] 可以不用处理，这里直接利用 if-else 语句外的 i++
                 swap(nums, lastZero, i);
