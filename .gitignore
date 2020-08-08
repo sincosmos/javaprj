@@ -5,6 +5,5 @@
 .classpath
 .settings
 *weekly*
-*.iml
 .idea
 target
