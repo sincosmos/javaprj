@@ -7,4 +7,5 @@
 .idea
 *weekly*
 .idea
+*.iml
 target
