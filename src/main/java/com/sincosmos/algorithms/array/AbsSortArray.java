@@ -1,7 +1,6 @@
-package com.sincosmos.algorithms;
+package com.sincosmos.algorithms.array;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class AbsSortArray {
     public static void main(String[] args) {

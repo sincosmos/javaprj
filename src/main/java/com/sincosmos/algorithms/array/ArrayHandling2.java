@@ -1,4 +1,4 @@
-package com.sincosmos.algorithms;
+package com.sincosmos.algorithms.array;
 
 import java.util.*;
 

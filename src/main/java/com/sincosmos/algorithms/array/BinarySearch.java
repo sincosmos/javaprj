@@ -1,4 +1,4 @@
-package com.sincosmos.algorithms;
+package com.sincosmos.algorithms.array;
 
 /**
  * 给定排序数组a[]，和一个元素k，求k在a[]中出现的次数，时间复杂度要求不大于O(log n)
