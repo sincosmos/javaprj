@@ -112,19 +112,6 @@ public class ArraySort {
                 j--;
             }
             arr[j+1] = cur;
-            /*for(int j=i-1; j>=0; --j){
-                if(arr[j] > cur){
-                    arr[j+1] = arr[j];
-                    arr[j]=cur;
-                }else{
-                    arr[j+1] = cur;
-                    break;
-                }
-            }*/
-            /*for(; j>=0 && arr[j] > cur; --j){
-                arr[j+1]=arr[j];
-            }
-            arr[j+1] = cur;*/
         }
     }
 

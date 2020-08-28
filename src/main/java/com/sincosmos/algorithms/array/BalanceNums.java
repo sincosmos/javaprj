@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 左边都比它小
+ * 右边都比它大
+ */
 public class BalanceNums {
     public List<Integer> balanceNums(int[] arr){
         if(arr.length<=2) return Collections.emptyList();
