@@ -1,9 +1,8 @@
-package com.sincosmos.algorithms.leetcode.dp;
+package com.sincosmos.algorithms.leetcode.bfsdfs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import com.sincosmos.algorithms.leetcode.dp.P416CanPartition;
+
+import java.util.*;
 
 /**
  * 完全背包问题
@@ -33,5 +32,26 @@ public class P39CombinationSum {
         }
 
         return cur[target];
+    }
+
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        dfs(candidates, 0, target, new ArrayDeque<>(), res);
+        return res;
+    }
+
+
+    private void dfs(int[] candidates, int begin, int target, Deque<Integer> path, List<List<Integer>> res) {
+        if(target < 0) return;
+        if(target == 0) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for(int i=begin; i<candidates.length; ++i){
+            path.add(candidates[i]);
+            dfs(candidates, i, target - candidates[i], path, res);
+            path.pollLast();
+        }
     }
 }
